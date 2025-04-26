@@ -1,64 +1,76 @@
 # Image Cropper Server
 
-This is the backend server for the Image Cropper application. It handles image uploads and cropping operations.
-
-## Requirements
-
-- PHP 7.4 or higher
-- GD library enabled in PHP
-- Apache/Nginx web server
-- Write permissions for the uploads directory
+This is the server component of the Image Cropper application. It handles image uploads and cropping operations.
 
 ## Setup
 
-1. Make sure PHP and the GD library are installed:
-   ```bash
-   # For Ubuntu/Debian
-   sudo apt-get install php php-gd
-   
-   # For Windows
-   # Enable extension=gd in php.ini
-   ```
+### WSL Permissions Setup
 
-2. Configure your web server to point to this directory.
+Before proceeding with Apache setup, ensure proper permissions are set:
 
-3. Create an uploads directory and set proper permissions:
-   ```bash
-   mkdir uploads
-   chmod 777 uploads
-   ```
+```bash
+# Set ownership to your WSL user
+sudo chown -R $USER:$USER /path/to/project
 
-## API Endpoints
+# Set directory permissions
+sudo chmod -R 755 /path/to/project
 
-### POST /upload.php
+# Set uploads directory permissions
+sudo chmod -R 775 /path/to/project/server/uploads
 
-Handles image upload and cropping.
-
-**Request Parameters:**
-- `image`: The image file to upload
-- `x`: X coordinate of the crop area
-- `y`: Y coordinate of the crop area
-- `width`: Width of the crop area
-- `height`: Height of the crop area
-
-**Response:**
-```json
-{
-    "success": true,
-    "original": "path/to/original/image.jpg",
-    "cropped": "path/to/cropped/image.jpg"
-}
+# Set Apache config permissions
+sudo chown -R $USER:$USER /etc/apache2/sites-available/image-cropper.conf
+sudo chmod 644 /etc/apache2/sites-available/image-cropper.conf
 ```
 
-## Error Handling
+### Apache Configuration
 
-The server returns appropriate HTTP status codes and error messages in case of failures:
+The server is configured to run on Apache with PHP-FPM. Here's the current setup:
 
-- 400 Bad Request: Invalid input or processing error
-- 500 Internal Server Error: Server-side error
+- Port: 8000
+- Document Root: `/path/to/project/server`
+- PHP Handler: PHP-FPM 8.3
+
+Access the server at: `http://localhost:8000`
+
+### Endpoints
+
+1. **Ping Test**
+   - URL: `/ping.php`
+   - Method: GET
+   - Description: Simple endpoint to test if the server is running
+   - Response: "pong"
+
+2. **Image Upload**
+   - URL: `/upload.php`
+   - Method: POST
+   - Description: Handles image upload and cropping
+   - Parameters:
+     - `image`: The image file to upload
+     - `x`: X coordinate of crop start
+     - `y`: Y coordinate of crop start
+     - `width`: Width of crop area
+     - `height`: Height of crop area
+   - Response: JSON with status and cropped image URL
+
+### Configuration
+
+The server uses the following configuration (config.php):
+- Upload directory: `uploads/`
+- Maximum file size: 20MB
+- Allowed file types: jpg, jpeg, png, gif
+
+## Development
+
+To modify the server configuration:
+1. Edit `config.php` for basic settings
+2. Update Apache configuration in `/etc/apache2/sites-available/image-cropper.conf`
+3. Restart Apache: `sudo systemctl restart apache2`
 
 ## Security Notes
 
-- The server validates file types and sizes
-- Files are stored with unique names to prevent overwrites
-- CORS is configured to allow requests from any origin
+- Directory listing is disabled
+- File uploads are restricted to image types
+- Maximum file size is limited
+- Upload directory permissions are set to 775
+- Project directory permissions are set to 755

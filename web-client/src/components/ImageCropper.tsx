@@ -63,7 +63,7 @@ const ImageCropper = () => {
     });
 
     try {
-      const response = await axios.post('http://localhost:8000/server/upload.php', formData);
+      const response = await axios.post('http://localhost:8000/upload.php', formData);
       if (response.data.success) {
         setCroppedImage(response.data.cropped);
       }

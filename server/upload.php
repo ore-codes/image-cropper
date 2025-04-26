@@ -1,14 +1,11 @@
 <?php
 header('Content-Type: application/json');
 
-// Configuration
-$uploadDir = 'uploads/';
-$allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-$maxFileSize = 5 * 1024 * 1024; // 5MB
+include_once 'config.php';
 
 // Create uploads directory if it doesn't exist
-if (!file_exists($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
+if (!file_exists(UPLOAD_DIR)) {
+    mkdir(UPLOAD_DIR, 0777, true);
 }
 
 try {
@@ -24,18 +21,18 @@ try {
         throw new Exception('Upload failed with error code: ' . $file['error']);
     }
 
-    if (!in_array($file['type'], $allowedTypes)) {
+    if (!in_array($file['type'], ALLOWED_TYPES)) {
         throw new Exception('Invalid file type. Only JPG, PNG, and GIF are allowed.');
     }
 
-    if ($file['size'] > $maxFileSize) {
+    if ($file['size'] > MAX_FILE_SIZE) {
         throw new Exception('File size exceeds 5MB limit');
     }
 
     // Generate unique filename
     $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
     $filename = uniqid() . '.' . $extension;
-    $uploadPath = $uploadDir . $filename;
+    $uploadPath = UPLOAD_DIR . $filename;
 
     // Move uploaded file
     if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
@@ -63,7 +60,7 @@ try {
 
     // Save cropped image
     $croppedFilename = 'cropped_' . $filename;
-    $croppedPath = $uploadDir . $croppedFilename;
+    $croppedPath = UPLOAD_DIR . $croppedFilename;
 
     switch ($extension) {
         case 'jpg':

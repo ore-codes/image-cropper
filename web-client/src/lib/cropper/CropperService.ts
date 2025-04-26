@@ -7,6 +7,12 @@ class CropperService {
   chosenImage = new SessionStorageService<string | null>("chosenImage");
   croppedImage = new SessionStorageService<string | null>("croppedImage");
 
+  constructor() {
+    this.appState.data$.subscribe(() => {
+      this.error.setData(null);
+    });
+  }
+
   chooseImage(image: string) {
     this.chosenImage.setData(image);
     this.appState.setData(AppState.FILE_UPLOADED);

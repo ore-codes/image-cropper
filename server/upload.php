@@ -31,8 +31,12 @@ try {
 
     // Generate unique filename
     $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    if (empty($extension)) {
+        throw new Exception('File must have an extension');
+    }
+    $extension = strtolower($extension);
     $filename = uniqid() . '.' . $extension;
-    $uploadPath = UPLOAD_DIR . $filename;
+    $uploadPath = rtrim(UPLOAD_DIR, '/') . '/' . $filename;
 
     // Move uploaded file
     if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
@@ -62,6 +66,8 @@ try {
     $croppedFilename = 'cropped_' . $filename;
     $croppedPath = UPLOAD_DIR . $croppedFilename;
 
+    // Ensure the extension is in lowercase for the switch statement
+    $extension = strtolower($extension);
     switch ($extension) {
         case 'jpg':
         case 'jpeg':

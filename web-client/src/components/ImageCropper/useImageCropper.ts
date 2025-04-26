@@ -19,7 +19,14 @@ export default function useImageCropper() {
     // Get the original file from the data URL
     const response = await fetch(chosenImage as string);
     const blob = await response.blob();
-    formData.append('image', blob);
+
+    // Determine the file type from the data URL
+    if (!chosenImage) {
+      throw new Error('No image selected');
+    }
+    const fileType = chosenImage.split(';')[0].split('/')[1];
+    const file = new File([blob], `image.${fileType}`, { type: `image/${fileType}` });
+    formData.append('image', file);
 
     // Append crop coordinates
     Object.entries(cropData).forEach(([key, value]) => {

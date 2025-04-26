@@ -1,13 +1,13 @@
-import ImageChooser from '@/components/layout/ImageChooser/ImageChooser'
+import ImageChooser from '@/components/ImageChooser/ImageChooser'
 import useRxState from '@/lib/store/useRxState'
 import { cropperService } from '@/lib/cropper/CropperService'
 import { AppState } from './lib/AppState.enum';
-import ImageCropper from '@/components/layout/ImageCropper/ImageCropper';
+import ImageCropper from '@/components/ImageCropper/ImageCropper';
+import ImageSaver from '@/components/ImageSaver/ImageSaver';
 
 function App() {
   const appState = useRxState(cropperService.appState.data$);
   const error = useRxState(cropperService.error.data$);
-  const croppedImage = useRxState(cropperService.croppedImage.data$);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -19,27 +19,13 @@ function App() {
         )}
 
         {appState === AppState.FILE_UPLOADED && (
+          // File was uploaded and ready to be cropped
           <ImageCropper />
         )}
 
         {appState === AppState.FILE_CROPPED && (
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Cropped Result</h2>
-            <div className="border rounded-xl p-4">
-              <img
-                src={`http://localhost:8000/server/${croppedImage}`}
-                alt="Cropped"
-                className="max-w-full h-auto"
-              />
-            </div>
-            <a
-              href={`http://localhost:8000/server/${croppedImage}`}
-              download
-              className="btn-primary inline-block mt-4"
-            >
-              Download
-            </a>
-          </div>
+          // File was cropped and ready to be downloaded
+          <ImageSaver />
         )}
 
         {error && (

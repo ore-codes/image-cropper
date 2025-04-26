@@ -41,4 +41,4 @@ export class IdbService<T> {
       console.error('Error clearing from IndexedDB:', error);
     }
   }
-} 
+}

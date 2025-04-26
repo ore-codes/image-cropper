@@ -1,5 +1,5 @@
-import { cropperService } from "@/lib/cropper/CropperService";
-import useRxState from "@/lib/store/useRxState";
+import { cropperService } from '@/lib/cropper/CropperService';
+import useRxState from '@/lib/store/useRxState';
 
 export const useImageSaver = () => {
   const croppedImage = useRxState(cropperService.croppedImage.data$);
@@ -44,7 +44,7 @@ export const useImageSaver = () => {
     croppedImage,
     getImageUrl,
     handleDownload,
-    handleReset
+    handleReset,
   };
 };
 

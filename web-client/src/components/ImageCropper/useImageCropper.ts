@@ -1,10 +1,10 @@
-import { useRef, useState, useCallback } from "react";
-import { ReactCropperElement } from "react-cropper";
-import { CropData } from "@/lib/cropper/cropper.types";
-import axios from "axios";
-import { cropperService } from "@/lib/cropper/CropperService";
-import useRxState from "@/lib/store/useRxState";
-import { DragEvent } from "react";
+import { useRef, useState, useCallback } from 'react';
+import { ReactCropperElement } from 'react-cropper';
+import { CropData } from '@/lib/cropper/cropper.types';
+import axios from 'axios';
+import { cropperService } from '@/lib/cropper/CropperService';
+import useRxState from '@/lib/store/useRxState';
+import { DragEvent } from 'react';
 
 export default function useImageCropper() {
   const cropperRef = useRef<ReactCropperElement | null>(null);
@@ -97,6 +97,6 @@ export default function useImageCropper() {
     handleDragOver,
     handleDrop,
     handleCropUpdate,
-    previewUrl
+    previewUrl,
   };
 }

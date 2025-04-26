@@ -1,5 +1,5 @@
-import { useCallback, useState, DragEvent, ChangeEvent } from "react";
-import { cropperService } from "@/lib/cropper/CropperService";
+import { useCallback, useState, DragEvent, ChangeEvent } from 'react';
+import { cropperService } from '@/lib/cropper/CropperService';
 
 export default function useImageChooser() {
   const [isDragging, setIsDragging] = useState(false);
@@ -31,5 +31,5 @@ export default function useImageChooser() {
     reader.readAsDataURL(file);
   };
 
-  return { isDragging, setIsDragging, handleFileDrop, handleFileChange }
+  return { isDragging, setIsDragging, handleFileDrop, handleFileChange };
 }

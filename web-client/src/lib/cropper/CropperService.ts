@@ -1,11 +1,11 @@
-import { SessionStorageService } from "../store/SessionStorageService";
+import { IdbService } from "../store/IdbService";
 import { AppState } from "../AppState.enum";
 
 class CropperService {
-  appState = new SessionStorageService<AppState>("appState");
-  error = new SessionStorageService<string | null>("error");
-  chosenImage = new SessionStorageService<string | null>("chosenImage");
-  croppedImage = new SessionStorageService<string | null>("croppedImage");
+  appState = new IdbService<AppState>("appState");
+  error = new IdbService<string | null>("error");
+  chosenImage = new IdbService<string | null>("chosenImage");
+  croppedImage = new IdbService<string | null>("croppedImage");
 
   constructor() {
     this.appState.data$.subscribe(() => {
@@ -13,20 +13,20 @@ class CropperService {
     });
   }
 
-  chooseImage(image: string) {
-    this.chosenImage.setData(image);
-    this.appState.setData(AppState.FILE_UPLOADED);
+  async chooseImage(image: string) {
+    await this.chosenImage.setData(image);
+    await this.appState.setData(AppState.FILE_UPLOADED);
   }
 
-  cropImage(image: string) {
-    this.croppedImage.setData(image);
-    this.appState.setData(AppState.FILE_CROPPED);
+  async cropImage(image: string) {
+    await this.croppedImage.setData(image);
+    await this.appState.setData(AppState.FILE_CROPPED);
   }
 
-  reset() {
-    this.chosenImage.setData(null);
-    this.croppedImage.setData(null);
-    this.appState.setData(AppState.INITIAL);
+  async reset() {
+    await this.chosenImage.clear();
+    await this.croppedImage.clear();
+    await this.appState.setData(AppState.INITIAL);
   }
 }
 

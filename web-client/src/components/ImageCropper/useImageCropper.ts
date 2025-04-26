@@ -1,29 +1,74 @@
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import { ReactCropperElement } from "react-cropper";
 import { CropData } from "@/lib/cropper/cropper.types";
 import axios from "axios";
 import { cropperService } from "@/lib/cropper/CropperService";
 import useRxState from "@/lib/store/useRxState";
+import { DragEvent } from "react";
 
 export default function useImageCropper() {
   const cropperRef = useRef<ReactCropperElement | null>(null);
   const chosenImage = useRxState(cropperService.chosenImage.data$);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const handleDragOver = useCallback((e: DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback(async (e: DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        await cropperService.chooseImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, []);
+
+  const handleFileSelect = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          await cropperService.chooseImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  }, []);
+
+  const handleCropUpdate = useCallback(() => {
+    if (!cropperRef.current?.cropper) return;
+    const previewDataUrl = cropperRef.current.cropper.getCroppedCanvas().toDataURL();
+    setPreviewUrl(previewDataUrl);
+  }, []);
 
   const handleCrop = async () => {
-    if (!cropperRef.current) return;
+    if (!cropperRef.current || !chosenImage) return;
 
     const cropper = cropperRef.current.cropper;
     const cropData: CropData = cropper.getData(true);
+
+    // Generate preview
+    const previewDataUrl = cropper.getCroppedCanvas().toDataURL();
+    setPreviewUrl(previewDataUrl);
+
     const formData = new FormData();
 
     // Get the original file from the data URL
-    const response = await fetch(chosenImage as string);
+    const response = await fetch(chosenImage);
     const blob = await response.blob();
 
-    // Determine the file type from the data URL
-    if (!chosenImage) {
-      throw new Error('No image selected');
-    }
     const fileType = chosenImage.split(';')[0].split('/')[1];
     const file = new File([blob], `image.${fileType}`, { type: `image/${fileType}` });
     formData.append('image', file);
@@ -36,13 +81,22 @@ export default function useImageCropper() {
     try {
       const response = await axios.post('http://localhost:8000/upload.php', formData);
       if (response.data.success) {
-        cropperService.cropImage(response.data.cropped)
+        await cropperService.cropImage(response.data.cropped);
       }
     } catch (error) {
-      cropperService.error.setData('Failed to crop image. Please try again.');
+      await cropperService.error.setData('Failed to crop image. Please try again.');
       console.error('Error:', error);
     }
   };
 
-  return { cropperRef, chosenImage, handleCrop }
+  return {
+    cropperRef,
+    chosenImage,
+    handleCrop,
+    handleFileSelect,
+    handleDragOver,
+    handleDrop,
+    handleCropUpdate,
+    previewUrl
+  };
 }

@@ -34,7 +34,7 @@ const ImageSaver = () => {
 
           <button
             onClick={h.handleDownload}
-            className="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors text-sm sm:text-base w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 btn-primary w-full sm:w-auto"
           >
             <Icon icon="heroicons:arrow-down-tray" className="w-4 h-4 sm:w-5 sm:h-5" />
             Download Image

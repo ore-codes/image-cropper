@@ -1,16 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3B82F6; /* Blue-500 */
+  --color-primary: #4d2585;
   --radius-xl: 1rem;
+  --font-sans: 'Inter Variable', sans-serif;
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors;
-  }
-  
-  .upload-area {
-    @apply border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-colors;
+    @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/80 transition-colors text-sm sm:text-base;
   }
 }

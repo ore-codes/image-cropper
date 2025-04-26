@@ -7,7 +7,7 @@ const ImageChooser = () => {
 
   return (
     <div
-      className={cn('upload-area', { 'border-primary': h.isDragging })}
+      className={cn('border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-colors', { 'border-primary': h.isDragging })}
       onDragOver={(e) => {
         e.preventDefault();
         h.setIsDragging(true);

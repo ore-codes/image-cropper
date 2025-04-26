@@ -1,8 +1,8 @@
 <VirtualHost *:8000>
     ServerAdmin webmaster@localhost
-    DocumentRoot /home/oredev/projects/personal/image-cropper/server
+    DocumentRoot /path/to/your/image-cropper/server
 
-    <Directory /home/oredev/projects/personal/image-cropper/server>
+    <Directory /path/to/your/image-cropper/server>
         Options Indexes FollowSymLinks
         AllowOverride None
         Require all granted

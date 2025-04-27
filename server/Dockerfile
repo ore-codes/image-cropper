@@ -20,10 +20,14 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /var/www/html/public
 
-# Copy application files
-COPY . .
+# Copy public files
+COPY public/ .
+
+# Go back up to put config.php in /var/www/html
+WORKDIR /var/www/html
+COPY config.php .
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf

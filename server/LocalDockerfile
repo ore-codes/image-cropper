@@ -1,17 +1,15 @@
-# Use PHP 8.3 FPM base image
+# Use PHP 8.3 FPM as base image
 FROM php:8.3-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
   git \
   curl \
-  nginx \
   libpng-dev \
   libonig-dev \
   libxml2-dev \
   zip \
-  unzip \
-  supervisor
+  unzip
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -25,20 +23,13 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . .
 
-# Copy nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 755 /var/www/html
 RUN chmod -R 775 /var/www/html/public/uploads
 
-# Configure supervisord to run php-fpm and nginx together
-RUN mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Expose port 9000
+EXPOSE 9000
 
-# Expose HTTP port
-EXPOSE 80
-
-# Start supervisord
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Start PHP-FPM
+CMD ["php-fpm"] 

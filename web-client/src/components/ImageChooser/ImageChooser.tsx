@@ -24,7 +24,12 @@ const ImageChooser = () => {
       <p className="text-gray-600">Drag and drop your image here, or</p>
       <label className="btn-primary mt-2 inline-block cursor-pointer">
         Choose File
-        <input type="file" className="hidden" accept="image/*" onChange={h.handleFileChange} />
+        <input
+          type="file"
+          className="hidden"
+          accept="image/jpeg,image/png,image/gif"
+          onChange={h.handleFileChange}
+        />
       </label>
     </div>
   );

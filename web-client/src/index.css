@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-primary: #4d2585;
+  --color-primary: #113;
   --radius-xl: 1rem;
   --font-sans: 'Inter Variable', sans-serif;
 }

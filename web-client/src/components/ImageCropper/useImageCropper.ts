@@ -5,11 +5,20 @@ import axios from 'axios';
 import { cropperService } from '@/lib/cropper/CropperService';
 import useRxState from '@/lib/store/useRxState';
 import { DragEvent } from 'react';
+import { Env } from '@/lib/config';
 
 export default function useImageCropper() {
   const cropperRef = useRef<ReactCropperElement | null>(null);
   const chosenImage = useRxState(cropperService.chosenImage.data$);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [aspectRatio, setAspectRatio] = useState<number>(NaN);
+
+  const handleAspectRatioChange = useCallback((value: number) => {
+    setAspectRatio(value);
+    if (cropperRef.current?.cropper) {
+      cropperRef.current.cropper.setAspectRatio(value);
+    }
+  }, []);
 
   const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
@@ -79,7 +88,7 @@ export default function useImageCropper() {
     });
 
     try {
-      const response = await axios.post('http://localhost:8000/upload.php', formData);
+      const response = await axios.post(`${Env.ServerUrl}/upload.php`, formData);
       if (response.data.success) {
         await cropperService.cropImage(response.data.cropped);
       }
@@ -98,5 +107,7 @@ export default function useImageCropper() {
     handleDrop,
     handleCropUpdate,
     previewUrl,
+    aspectRatio,
+    handleAspectRatioChange,
   };
 }

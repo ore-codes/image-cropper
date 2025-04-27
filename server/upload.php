@@ -51,6 +51,10 @@ try {
 
     // Create cropped image
     $sourceImage = imagecreatefromstring(file_get_contents($uploadPath));
+    if ($sourceImage === false) {
+        throw new Exception('Failed to process image. Please ensure it is a valid JPG, PNG, or GIF file.');
+    }
+
     $croppedImage = imagecrop($sourceImage, [
         'x' => $x,
         'y' => $y,
@@ -67,7 +71,6 @@ try {
     $croppedPath = UPLOAD_DIR . $croppedFilename;
 
     // Ensure the extension is in lowercase for the switch statement
-    $extension = strtolower($extension);
     switch ($extension) {
         case 'jpg':
         case 'jpeg':

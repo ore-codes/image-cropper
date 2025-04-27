@@ -2,6 +2,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import useImageCropper from './useImageCropper';
 import { cropperService } from '@/lib/cropper/CropperService';
+import { CropperConfig } from '@/lib/cropper/cropper.config';
 
 const ImageCropper = () => {
   const h = useImageCropper();
@@ -11,7 +12,20 @@ const ImageCropper = () => {
       <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-2">
         {/* Original Image Section */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold">Original Image</h2>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Original Image</h2>
+            <select
+              value={h.aspectRatio}
+              onChange={(e) => h.handleAspectRatioChange(parseFloat(e.target.value))}
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              {CropperConfig.aspectRatios.map((ratio) => (
+                <option key={ratio.label} value={ratio.value}>
+                  {ratio.label}
+                </option>
+              ))}
+            </select>
+          </div>
           <div
             className="overflow-hidden rounded-lg bg-gray-100"
             onDragOver={h.handleDragOver}
@@ -28,6 +42,7 @@ const ImageCropper = () => {
               toggleDragModeOnDblclick={false}
               crop={h.handleCropUpdate}
               ready={h.handleCropUpdate}
+              aspectRatio={h.aspectRatio}
             />
           </div>
           <div className="mt-4 flex items-center gap-2">

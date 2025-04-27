@@ -1,5 +1,6 @@
 import { useCallback, useState, DragEvent, ChangeEvent } from 'react';
 import { cropperService } from '@/lib/cropper/CropperService';
+import { CropperConfig } from '@/lib/cropper/cropper.config';
 
 export default function useImageChooser() {
   const [isDragging, setIsDragging] = useState(false);
@@ -21,6 +22,11 @@ export default function useImageChooser() {
   const handleFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
       cropperService.error.setData('Please upload an image file');
+      return;
+    }
+
+    if (!CropperConfig.allowedTypes.includes(file.type)) {
+      cropperService.error.setData('Only JPG, PNG, and GIF images are supported');
       return;
     }
 

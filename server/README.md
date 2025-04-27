@@ -1,76 +1,81 @@
-# Image Cropper Server
+# Server
 
-This is the server component of the Image Cropper application. It handles image uploads and cropping operations.
+PHP backend server for the Image Cropper project.
 
-## Setup
+## Prerequisites
 
-### WSL Permissions Setup
+- PHP 8.0 or higher
+- Composer (PHP package manager)
+- Web server (Apache/Nginx)
 
-Before proceeding with Apache setup, ensure proper permissions are set:
+## Getting Started
 
+1. Install dependencies:
 ```bash
-# Set ownership to your WSL user
-sudo chown -R $USER:$USER /path/to/project
-
-# Set directory permissions
-sudo chmod -R 755 /path/to/project
-
-# Set uploads directory permissions
-sudo chmod -R 775 /path/to/project/server/uploads
-
-# Set Apache config permissions
-sudo chown -R $USER:$USER /etc/apache2/sites-available/image-cropper.conf
-sudo chmod 644 /etc/apache2/sites-available/image-cropper.conf
+composer install
 ```
 
+2. Configure your web server:
+
 ### Apache Configuration
+```apache
+<VirtualHost *:80>
+    ServerName localhost
+    DocumentRoot /path/to/server
+    
+    <Directory /path/to/server>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
 
-The server is configured to run on Apache with PHP-FPM. Here's the current setup:
+### Nginx Configuration
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+    root /path/to/server;
+    
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+```
 
-- Port: 8000
-- Document Root: `/path/to/project/server`
-- PHP Handler: PHP-FPM 8.3
+3. Set up file permissions:
+```bash
+chmod -R 755 /path/to/server
+chown -R www-data:www-data /path/to/server
+```
 
-Access the server at: `http://localhost:8000`
+## Project Structure
 
-### Endpoints
+```
+server/
+├── uploads/          # Upload directory for processed images
+├── config.php        # Server configuration
+├── ping.php          # Health check endpoint
+├── serve-image.php   # Image serving endpoint
+├── upload.php        # Image upload and processing endpoint
+└── README.md         # This file
+```
 
-1. **Ping Test**
-   - URL: `/ping.php`
-   - Method: GET
-   - Description: Simple endpoint to test if the server is running
-   - Response: "pong"
+## Features
 
-2. **Image Upload**
-   - URL: `/upload.php`
-   - Method: POST
-   - Description: Handles image upload and cropping
-   - Parameters:
-     - `image`: The image file to upload
-     - `x`: X coordinate of crop start
-     - `y`: Y coordinate of crop start
-     - `width`: Width of crop area
-     - `height`: Height of crop area
-   - Response: JSON with status and cropped image URL
+- Image upload handling
+- Image cropping processing
+- Secure file handling
+- Error handling and logging
 
-### Configuration
+## License
 
-The server uses the following configuration (config.php):
-- Upload directory: `uploads/`
-- Maximum file size: 20MB
-- Allowed file types: jpg, jpeg, png, gif
-
-## Development
-
-To modify the server configuration:
-1. Edit `config.php` for basic settings
-2. Update Apache configuration in `/etc/apache2/sites-available/image-cropper.conf`
-3. Restart Apache: `sudo systemctl restart apache2`
-
-## Security Notes
-
-- Directory listing is disabled
-- File uploads are restricted to image types
-- Maximum file size is limited
-- Upload directory permissions are set to 775
-- Project directory permissions are set to 755
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

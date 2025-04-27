@@ -1,54 +1,63 @@
-# React + TypeScript + Vite
+# Web Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React-based frontend application for the Image Cropper project.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 16 or higher
+- Any package manager (npm preferred)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+1. Install dependencies:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
+2. Create environment file:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
 ```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`.
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| VITE_SERVER_URL | Backend server URL | http://localhost:8000 |
+
+## Project Structure
+
+```
+web-client/
+├── src/
+│   ├── components/     # React components
+│   ├── lib/           # Utility functions and configurations
+│   ├── store/         # State management
+│   └── App.tsx        # Main application component
+├── public/            # Static assets
+└── package.json       # Project dependencies
+```
+
+## Features
+
+- Drag and drop image upload
+- Image cropping with various aspect ratios:
+  - Free (no fixed ratio)
+  - Square (1:1)
+  - Landscape (16:9)
+  - Portrait (9:16)
+  - Widescreen (21:9)
+- Real-time preview
+- Responsive design
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

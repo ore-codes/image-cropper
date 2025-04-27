@@ -5,67 +5,39 @@ PHP backend server for the Image Cropper project.
 ## Prerequisites
 
 - PHP 8.0 or higher
-- Composer (PHP package manager)
-- Web server (Apache/Nginx)
+- Docker and Docker Compose (for containerized deployment)
 
 ## Getting Started
 
-1. Install dependencies:
+1. Build and start the containers:
 ```bash
-composer install
+docker-compose up -d --build
 ```
 
-2. Configure your web server:
-
-### Apache Configuration
-```apache
-<VirtualHost *:80>
-    ServerName localhost
-    DocumentRoot /path/to/server
-    
-    <Directory /path/to/server>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-
-### Nginx Configuration
-```nginx
-server {
-    listen 80;
-    server_name localhost;
-    root /path/to/server;
-    
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-    
-    location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
-}
-```
-
-3. Set up file permissions:
+2. Stop the containers:
 ```bash
-chmod -R 755 /path/to/server
-chown -R www-data:www-data /path/to/server
+docker-compose down
+```
+
+3. View logs:
+```bash
+docker-compose logs -f
 ```
 
 ## Project Structure
 
 ```
 server/
-├── uploads/          # Upload directory for processed images
-├── config.php        # Server configuration
-├── ping.php          # Health check endpoint
-├── serve-image.php   # Image serving endpoint
-├── upload.php        # Image upload and processing endpoint
+├── public/           # Publicly accessible directory
+│   ├── uploads/      # Upload directory for processed images
+│   ├── ping.php      # Health check endpoint
+│   ├── serve-image.php # Image serving endpoint
+│   └── upload.php    # Image upload and processing endpoint
+├── config.php        # Server configuration (outside web root)
+├── Dockerfile        # Docker configuration
+├── docker-compose.yml # Docker Compose configuration
+├── nginx.conf        # Nginx configuration
+├── setup.sh          # Setup script
 └── README.md         # This file
 ```
 

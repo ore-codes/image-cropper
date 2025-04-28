@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback } from 'react';
 import { ReactCropperElement } from 'react-cropper';
 import { CropData } from '@/lib/cropper/cropper.types';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { cropperService } from '@/lib/cropper/CropperService';
 import useRxState from '@/lib/store/useRxState';
 import { DragEvent } from 'react';
@@ -93,8 +93,12 @@ export default function useImageCropper() {
         await cropperService.cropImage(response.data.cropped);
       }
     } catch (error) {
-      await cropperService.error.setData('Failed to crop image. Please try again.');
-      console.error('Error:', error);
+      if (error instanceof AxiosError) {
+        await cropperService.error.setData(error.response?.data.error);
+      } else {
+        await cropperService.error.setData('Failed to crop image. Please try again.');
+        console.error(error);
+      }
     }
   };
 

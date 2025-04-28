@@ -17,7 +17,7 @@ const ImageCropper = () => {
             <select
               value={h.aspectRatio}
               onChange={(e) => h.handleAspectRatioChange(parseFloat(e.target.value))}
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
             >
               {CropperConfig.aspectRatios.map((ratio) => (
                 <option key={ratio.label} value={ratio.value}>

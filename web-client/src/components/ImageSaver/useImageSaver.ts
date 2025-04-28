@@ -1,3 +1,4 @@
+import { Env } from '@/lib/config';
 import { cropperService } from '@/lib/cropper/CropperService';
 import useRxState from '@/lib/store/useRxState';
 
@@ -6,7 +7,7 @@ export const useImageSaver = () => {
 
   const getImageUrl = (path: string) => {
     const filename = path.split('/').pop();
-    return `http://localhost:8000/serve-image.php?file=${filename}`;
+    return `${Env.ServerUrl}/serve-image.php?file=${filename}`;
   };
 
   const handleDownload = async () => {

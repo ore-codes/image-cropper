@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-include_once 'config.php';
+include_once __DIR__ . '/../config.php';
 
 // Create uploads directory if it doesn't exist
 if (!file_exists(UPLOAD_DIR)) {
@@ -43,6 +43,35 @@ try {
         throw new Exception('Failed to move uploaded file');
     }
 
+    // Validate image dimensions before loading
+    $imageInfo = getimagesize($uploadPath);
+    if ($imageInfo === false) {
+        throw new Exception('Invalid image file.');
+    }
+    if ($imageInfo[0] > 5000 || $imageInfo[1] > 5000) {
+        throw new Exception('Image dimensions too large. Maximum allowed is 5000x5000 pixels.');
+    }
+
+    // Create source image properly based on extension
+    switch ($extension) {
+        case 'jpg':
+        case 'jpeg':
+            $sourceImage = imagecreatefromjpeg($uploadPath);
+            break;
+        case 'png':
+            $sourceImage = imagecreatefrompng($uploadPath);
+            break;
+        case 'gif':
+            $sourceImage = imagecreatefromgif($uploadPath);
+            break;
+        default:
+            throw new Exception('Unsupported image type.');
+    }
+
+    if ($sourceImage === false) {
+        throw new Exception('Failed to process image. Please ensure it is a valid JPG, PNG, or GIF file.');
+    }
+
     // Get cropping parameters
     $x = isset($_POST['x']) ? (int)$_POST['x'] : 0;
     $y = isset($_POST['y']) ? (int)$_POST['y'] : 0;
@@ -50,11 +79,6 @@ try {
     $height = isset($_POST['height']) ? (int)$_POST['height'] : 0;
 
     // Create cropped image
-    $sourceImage = imagecreatefromstring(file_get_contents($uploadPath));
-    if ($sourceImage === false) {
-        throw new Exception('Failed to process image. Please ensure it is a valid JPG, PNG, or GIF file.');
-    }
-
     $croppedImage = imagecrop($sourceImage, [
         'x' => $x,
         'y' => $y,
@@ -70,7 +94,6 @@ try {
     $croppedFilename = 'cropped_' . $filename;
     $croppedPath = UPLOAD_DIR . $croppedFilename;
 
-    // Ensure the extension is in lowercase for the switch statement
     switch ($extension) {
         case 'jpg':
         case 'jpeg':
@@ -101,4 +124,4 @@ try {
         'success' => false,
         'error' => $e->getMessage()
     ]);
-} 
+}

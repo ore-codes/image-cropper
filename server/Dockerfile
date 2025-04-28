@@ -1,10 +1,10 @@
 FROM php:8.3-fpm
 
 RUN apt-get update && apt-get install -y \
-  git curl nginx libpng-dev libonig-dev libxml2-dev zip unzip \
+  git curl nginx libpng-dev libjpeg-dev libgif-dev libonig-dev libxml2-dev zip unzip \
+  && docker-php-ext-configure gd --with-jpeg \
+  && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
   && rm -rf /var/lib/apt/lists/*
-
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 WORKDIR /var/www/html
 

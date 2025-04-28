@@ -4,7 +4,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
-include_once 'config.php';
+include_once __DIR__ . '/../config.php';
 
 // Get the filename from the URL
 $filename = basename($_GET['file']);

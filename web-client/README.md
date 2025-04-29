@@ -22,12 +22,19 @@ React-based frontend application for the Image Cropper project.
    # Edit .env with your configuration
    ```
 
-3. Start the development server:
+3. Build the web app:
+
    ```bash
-   npm run dev
+   npm run build
    ```
 
-The application will be available at [http://localhost:5173](http://localhost:5173).
+4. Preview the build
+
+   ```bash
+   npm run preview
+   ```
+
+The application will be available at [http://localhost:4173](http://localhost:4173).
 
 ## Environment Variables
 
@@ -52,13 +59,9 @@ web-client/
 - React
 - RxJS
 - Tailwind CSS
-- IndexedDB (via idb)
+- IndexedDB
 
-## Development
+## Preview
 
-- Frontend runs locally on [http://localhost:5173](http://localhost:5173)
+- Frontend runs locally on [http://localhost:4173](http://localhost:4173)
 - Live deployment available at [https://image-cropper-henna.vercel.app/](https://image-cropper-henna.vercel.app/)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

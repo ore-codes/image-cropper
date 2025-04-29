@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
   && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
   && rm -rf /var/lib/apt/lists/*
 
+RUN echo "upload_max_filesize=5M\npost_max_size=12M\nmax_execution_time=300\nmemory_limit=128M" > /usr/local/etc/php/conf.d/uploads.ini
+
 WORKDIR /var/www/html
 
 COPY --chown=www-data:www-data config.php .

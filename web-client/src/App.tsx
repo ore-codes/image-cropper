@@ -32,6 +32,17 @@ function App() {
         )}
 
         {error && <div className="mt-4 rounded-lg bg-red-100 p-4 text-red-700">{error}</div>}
+
+        <div className="mt-10 rounded-md bg-gray-200 p-4 text-sm text-gray-700">
+          <p>
+            Note: The backend is hosted on the Render free plan, so:
+            <ul className="list-disc ml-5 my-2">
+              <li>There may be a cold start delay.</li>
+              <li>Large files may cause a Cloudflare 520 error, which is out of my control.</li>
+            </ul>
+            It will work fine when you run the image cropper locally.
+          </p>
+        </div>
       </div>
     </div>
   );

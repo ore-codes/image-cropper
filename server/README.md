@@ -8,14 +8,9 @@ PHP backend server for the Image Cropper project.
 
 ## Getting Started
 
-1. Build the image:
+1. Run the image:
    ```bash
-   docker build -t image-cropper-app .
-   ```
-
-2. Execute the image:
-   ```bash
-   docker run -it -p 8000:80 image-cropper-app
+   docker run -it -p 8000:80 orequodline/imagecropper:latest
    ```
 
 ## Project Structure

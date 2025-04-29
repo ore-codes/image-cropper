@@ -20,13 +20,14 @@ export default function useImageChooser() {
   };
 
   const handleFile = (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      cropperService.error.setData('Please upload an image file');
+    if (!CropperConfig.allowedTypes.includes(file.type)) {
+      cropperService.error.setData('Only JPG, PNG, and GIF images are supported');
       return;
     }
 
-    if (!CropperConfig.allowedTypes.includes(file.type)) {
-      cropperService.error.setData('Only JPG, PNG, and GIF images are supported');
+    const maxSizeInBytes = 4 * 2 ** 20; // 5MB
+    if (file.size > maxSizeInBytes) {
+      cropperService.error.setData('File size must not exceed 4MB');
       return;
     }
 

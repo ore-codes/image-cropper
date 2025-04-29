@@ -3,6 +3,7 @@ import 'cropperjs/dist/cropper.css';
 import useImageCropper from './useImageCropper';
 import { cropperService } from '@/lib/cropper/CropperService';
 import { CropperConfig } from '@/lib/cropper/cropper.config';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 const ImageCropper = () => {
   const h = useImageCropper();
@@ -66,7 +67,7 @@ const ImageCropper = () => {
               <img src={h.previewUrl} alt="Preview" className="h-full w-full object-contain" />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-gray-400">
-
+                <Icon icon="line-md:loading-alt-loop" className="text-gray-600 text-3xl" />
               </div>
             )}
           </div>

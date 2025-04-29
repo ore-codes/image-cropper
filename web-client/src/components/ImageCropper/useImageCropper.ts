@@ -12,6 +12,7 @@ export default function useImageCropper() {
   const chosenImage = useRxState(cropperService.chosenImage.data$);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [aspectRatio, setAspectRatio] = useState<number>(NaN);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleAspectRatioChange = useCallback((value: number) => {
     setAspectRatio(value);
@@ -87,6 +88,7 @@ export default function useImageCropper() {
       formData.append(key, value.toString());
     });
 
+    setLoading(true);
     try {
       const response = await axios.post(`${Env.ServerUrl}/upload.php`, formData);
       if (response.data.success) {
@@ -99,6 +101,8 @@ export default function useImageCropper() {
         await cropperService.error.setData('Failed to crop image. Please try again.');
         console.error(error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,6 +114,7 @@ export default function useImageCropper() {
     handleDragOver,
     handleDrop,
     handleCropUpdate,
+    loading,
     previewUrl,
     aspectRatio,
     handleAspectRatioChange,

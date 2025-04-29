@@ -66,13 +66,17 @@ const ImageCropper = () => {
               <img src={h.previewUrl} alt="Preview" className="h-full w-full object-contain" />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-gray-400">
-                400 × 300
+
               </div>
             )}
           </div>
           <div className="mt-4 flex justify-end gap-3">
-            <button onClick={h.handleCrop} className="btn-primary">
-              Apply Crop
+            <button
+              onClick={h.handleCrop}
+              className={`btn-primary transition-opacity ${h.loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={h.loading}
+            >
+              {h.loading ? 'Applying Crop...' : 'Apply Crop'}
             </button>
           </div>
         </div>
